@@ -23,19 +23,13 @@ namespace SampleChecksumValidator
         return false;
       }
 
-      byte sum = 0;
-      byte sumB = 0;
-      for(int i = 0; i < checksumTagStartIndex; i += 2)
+      int sum = 0;
+      for(int i = 0; i < checksumTagStartIndex; i++)
       {
         sum += data[i];
-        int next = i + 1;
-        if(next < checksumTagStartIndex)
-        {
-          sumB += data[next];
-        }
       }
 
-      int expectedChecksum = (sum + sumB) % Modulus;
+      int expectedChecksum = sum % Modulus;
       Span<byte> expectedDigits = stackalloc byte[ChecksumValueLength];
       _converter.Convert(number: expectedChecksum, into: expectedDigits, count: ChecksumValueLength);
 

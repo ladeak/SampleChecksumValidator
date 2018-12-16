@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.11.3" />
-    <PackageReference Include="DanubeDev.RapideFix" Version="0.1.0" />
+    <PackageReference Include="DanubeDev.RapideFix" Version="0.1.0-CI-20181215-094629" />
   </ItemGroup>
 
 </Project>
