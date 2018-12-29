@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Collections.Generic;
+using BenchmarkDotNet.Attributes;
 using RapideFix;
 using RapideFix.MessageBuilders;
 
@@ -13,17 +14,19 @@ namespace SampleChecksumValidator
     internal const string Sample2 = "35=8|49=PHLX|56=PERS|52=20071123-05:30:00.000|11=ATOMNOCCC9990900|20=3|150=E|39=E|55=MSFT|167=CS|54=1|38=15|40=2|44=15|58=PHLX EQUITY TESTING|59=0|47=C|32=0|31=0|151=15|14=0|6=0|35=8|49=PHLX|56=PERS|52=20071123-05:30:00.000|11=ATOMNOCCC9990900|20=3|150=E|39=E|55=MSFT|167=CS|54=1|38=15|40=2|44=15|58=PHLX EQUITY TESTING|59=0|47=C|32=0|31=0|151=15|14=0|6=0|";
     internal const int ChecksumLength = 7;
 
+    public IEnumerable<DisplayParam> Samples => new[] { new DisplayParam(Sample0), new DisplayParam(Sample1), new DisplayParam(Sample2) };
+
     private ChecksumValidator _validator;
     private byte[] _message;
     private int _checksumStart = 0;
 
-    [Params(Sample0, Sample1, Sample2)]
-    public string Sample { get; set; }
+    [ParamsSource(nameof(Samples))]
+    public DisplayParam Sample { get; set; }
 
     [GlobalSetup]
     public void GlobalSetup()
     {
-      _message = new MessageBuilder().AddRaw(Sample).Build();
+      _message = new MessageBuilder().AddRaw(Sample.Value).Build();
       _checksumStart = _message.Length - ChecksumLength;
       _validator = new ChecksumValidator(IntegerToFixConverter.Instance);
     }
